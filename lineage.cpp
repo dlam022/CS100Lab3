@@ -3,7 +3,7 @@
 #include "personList.h"
 
 int main() {
-    PersonList theList;
+    PersonList theList; //is it this?
 
     theList.addPerson("Bob", "Mark", "Betty");
     theList.addPerson("Jim", "Bob", "Sally");
