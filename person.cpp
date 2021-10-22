@@ -6,22 +6,24 @@ using std::cout;
 using std::endl;
 
 Person::Person(const char *name_, Person* father_, Person* mother_){
-    name = new char[strlen(name_)];
-    strcpy(name, name_);
-    father = father_;
-    mother = mother_;
+    this->name = new char[strlen(name_) + 1]; //change
+    strcpy(this->name, name_);
+    this->father = father_; //change
+    this->mother = mother_; //change
     capacity = 1;
     numChildren = 0;
     children = new Person*[capacity];
 }
 
 Person::~Person(){
-    delete children;
+    delete[] children; //change this because children is an array
+    delete[]   name; //add
 }
 
 void Person::addChild(Person *newChild){
     if(numChildren == capacity) expand(&children, &capacity);
     children[numChildren++] = newChild;
+    newChild = nullptr; //add
 }
 
 void Person::printAncestors(){
@@ -35,7 +37,7 @@ void Person::printDecendents(){
 }
 
 void Person::printLineage(char dir, int level){
-    char *temp = compute_relation(level);
+    char *temp = compute_relation(level); 
 
     if(dir == 'd'){
         for(int i = 0; i < numChildren; i++){
@@ -52,6 +54,8 @@ void Person::printLineage(char dir, int level){
             father->printLineage(dir, level + 1);
         }
     }
+    delete[] temp; //add
+    temp = nullptr; //add
 }
 
 /* helper function to compute the lineage
@@ -66,7 +70,11 @@ char* Person::compute_relation(int level){
     for(int i = 2; i <= level; i++){
         char *temp2 = new char[strlen("great ") + strlen(temp) + 1];
         strcat(strcpy(temp2, "great "), temp);
+	char *temp3 = temp; //add
         temp = temp2;
+	delete[] temp3; //change
+	temp2 = nullptr; //add
+	temp3 = nullptr; //add
     }
     return temp;
 }
@@ -78,5 +86,10 @@ void expand(Person ***t, int *MAX){
   Person **temp = new Person*[2 * *MAX];
   memcpy(temp, *t, *MAX * sizeof(**t));
   *MAX *= 2;
+  Person **temp1 = *t; //add
   *t = temp;
+  delete[] temp1; //add
+  temp = nullptr; //add
+  temp1 = nullptr; //add
+  MAX = nullptr; //add
 }
